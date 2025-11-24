@@ -8,16 +8,47 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 
-/ {
-    keymap {
-        compatible = "zmk,keymap";
 
-        default_layer {
-            display-name = "Default Layer";
-            bindings = <
-                &kp X
-                &kp Z
-            >;
-        };
-    };
+
+kscan0: kscan {
+    compatible = "zmk,kscan-gpio-matrix";
+
+    /* This is the most common diode direction for handwiring.
+     * It means the diode flows from the Column to the Row.
+     *
+     * Switch Pin 1 -> Diode (Anode)
+     * Diode (Cathode) -> Row Pin
+     * Switch Pin 2 -> Column Pin
+     */
+    diode-direction = "col2row";
+
+    // Define your Row pins (Pro Micro D0, D1)
+    row-gpios = <&pro_micro 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,  // Row 0 = D0
+                <&pro_micro 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;  // Row 1 = D1
+
+    // Define your Column pins (Pro Micro D2, D3)
+    col-gpios = <&pro_micro 4 GPIO_ACTIVE_HIGH>,  // Col 0 = D2
+                <&pro_micro 5 GPIO_ACTIVE_HIGH>;  // Col 1 = D3
+};
+
+
+default_layer {
+    bindings = <
+        &kp A    &kp B
+        &kp C    &mo 1
+    >;
+};
+
+/* Layer 1: Test Layer
+ * -------------------
+ * | BT_CLR | (trans) |
+ * -------------------
+ * | (trans)  | (trans) |
+ * -------------------
+ */
+layer_1 {
+    bindings = <
+        &bt BT_CLR   &trans
+        &trans       &trans
+    >;
 };
