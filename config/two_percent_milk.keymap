@@ -10,7 +10,7 @@
 
 
 
-kscan0: kscan {
+/ kscan0: kscan {
     compatible = "zmk,kscan-gpio-matrix";
 
     /* This is the most common diode direction for handwiring.
